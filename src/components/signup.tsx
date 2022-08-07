@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
+import { Link } from "react-router-dom";
 
-const Form = ({ onSubmit }: FormProps) => {
+const SignUp = () => {
   const [user, setUser] = useState({ name: "", email: "", password: "" });
   const validateEmail = useCallback(() => {
     return String(user.email)
@@ -30,6 +31,9 @@ const Form = ({ onSubmit }: FormProps) => {
 
   return (
     <div className="h-48 w-96 p-4">
+      <Link to={"/"}>
+        <span className="py-8">{"<- Back"} </span>
+      </Link>
       <input
         className="p-2 border-0 shadow-md w-96"
         value={user.name}
@@ -77,11 +81,13 @@ const Form = ({ onSubmit }: FormProps) => {
       )}
       <button
         onClick={() => {
-          onSubmit(user);
+          console.log("====================================");
+          console.log(user);
+          console.log("====================================");
         }}
         type="submit"
         disabled={!isFormValid()}
-        className="p-2 mt-8 w-96 bg-blue-500 shadow-md text-white rounded-md"
+        className="p-2 mt-8 w-96 bg-blue-500 shadow-md text-white rounded-md disabled:bg-gray-300"
       >
         Submit
       </button>
@@ -89,4 +95,4 @@ const Form = ({ onSubmit }: FormProps) => {
   );
 };
 
-export default Form;
+export default SignUp;
