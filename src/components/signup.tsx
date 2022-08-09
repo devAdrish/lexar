@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "services/api";
 
 const SignUp = () => {
   const [user, setUser] = useState({ name: "", email: "", password: "" });
@@ -10,7 +11,21 @@ const SignUp = () => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   }, [user.email]);
+  const navigate = useNavigate();
 
+  const onSubmit = async () => {
+    try {
+      const res = await api.post("/register", user);
+      console.log("====================================");
+      console.log(res);
+      console.log("====================================");
+      const { token } = res.data;
+      localStorage.setItem("token", token);
+      navigate("/dashboard");
+    } catch (err: any) {
+      console.log(err?.response);
+    }
+  };
   const validatePassword = useCallback(() => {
     return (
       /[a-z]/.test(user.password) &&
@@ -80,11 +95,7 @@ const SignUp = () => {
         </p>
       )}
       <button
-        onClick={() => {
-          console.log("====================================");
-          console.log(user);
-          console.log("====================================");
-        }}
+        onClick={onSubmit}
         type="submit"
         disabled={!isFormValid()}
         className="p-2 mt-8 w-96 bg-blue-500 shadow-md text-white rounded-md disabled:bg-gray-300"

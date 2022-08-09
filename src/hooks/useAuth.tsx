@@ -1,5 +1,5 @@
 const useAuth = () => {
-  return localStorage.getItem("user");
+  return localStorage.getItem("token");
 };
 
 export default useAuth;
