@@ -9,7 +9,7 @@ const Dashboard = () => {
       <span
         className="mt-5 text-orange-500 cursor-pointer "
         onClick={() => {
-          localStorage.removeItem("user");
+          localStorage.removeItem("token");
           navigate("/login");
         }}
       >

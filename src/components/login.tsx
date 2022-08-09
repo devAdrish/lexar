@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { api } from "services/api";
 
 const Login = () => {
   const [user, setUser] = useState({ email: "", password: "" });
@@ -12,6 +13,15 @@ const Login = () => {
   }, [user.email]);
 
   const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const res = await api.post("/login", user);
+      const { token } = res.data;
+      localStorage.setItem("token", token);
+      navigate("/dashboard");
+    } catch {}
+  };
 
   return (
     <div className="h-48 w-96 p-4">
@@ -43,10 +53,7 @@ const Login = () => {
         }}
       />
       <button
-        onClick={() => {
-          localStorage.setItem("user", JSON.stringify(user));
-          navigate("/dashboard");
-        }}
+        onClick={handleLogin}
         type="submit"
         disabled={!validateEmail() || user.password.length < 6}
         className="p-2 mt-8 w-96 bg-blue-500 shadow-md text-white rounded-md disabled:bg-gray-300"
