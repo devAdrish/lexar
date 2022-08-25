@@ -6,26 +6,29 @@ import Login from "components/login";
 import SignUp from "components/signup";
 import Dashboard from "components/dashboard";
 import ProtectedRoute from "routes";
+import Layout from "components/layout";
 
 function App() {
   return (
-    <div className="h-screen w-screen flex flex-col justify-center items-center">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route
-            path="/dashboard"
-            element={
+
+      <div className="h-screen w-screen">
+        <BrowserRouter>
+          <Layout title="aiman">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
             }
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
+            />
+          </Routes>
+          </Layout>
+        </BrowserRouter >
+      </div >
+  
   );
 }
 
