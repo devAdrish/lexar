@@ -1,3 +1,4 @@
+@import "~antd/dist/antd.css"; 
 input:focus,
 textarea:focus {
   outline: none;

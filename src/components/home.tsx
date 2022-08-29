@@ -1,11 +1,13 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 
 const Home = () => {
   return (
-    <>
-    <h1>HOME</h1>
-    </> 
+    <div>
+      <h1>HOME</h1>
+      <br />
+      <br />
+      <div className="flex-col"></div>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import Navbar from "./navbar";
+
 interface LayoutProps {
   children: any;
 }
