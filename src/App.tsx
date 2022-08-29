@@ -7,7 +7,6 @@ import SignUp from "components/signup";
 import Dashboard from "components/dashboard";
 import ProtectedRoute from "routes";
 import Layout from "components/layout";
-import Spinner from "components/spinner";
 
 function App() {
   return (
@@ -29,9 +28,6 @@ function App() {
           </Routes>
         </Layout>
       </BrowserRouter>
-      <div className="grid place-items-center h-screen">
-        <Spinner show={true} />
-      </div>
     </div>
   );
 }

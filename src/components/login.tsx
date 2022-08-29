@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "services/api";
+import Spinner from "./spinner";
 
 const Login = () => {
   const [user, setUser] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
+
   const validateEmail = useCallback(() => {
     return String(user.email)
       .toLowerCase()
@@ -15,16 +18,22 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const res = await api.post("/login", user);
-      const { token } = res.data;
+      const { token } = res.data.data;
       localStorage.setItem("token", token);
+      setIsLoading(false);
       navigate("/dashboard");
-    } catch {}
+    } catch {
+      setIsLoading(false);
+    }
+
   };
 
   return (
     <div className="h-48 w-96 p-4">
+      <Spinner show={ isLoading }></Spinner>
       <Link to={"/"}>
         <span className="py-8">{"<- Back"} </span>
       </Link>
