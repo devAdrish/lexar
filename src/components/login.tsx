@@ -19,7 +19,15 @@ const Login = () => {
 
   const handleLogin = async () => {
     setIsLoading(true);
+
     try {
+      fetch("/login").then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.blob();
+      });
+
       const res = await api.post("/login", user);
       const { token } = res.data.data;
       localStorage.setItem("token", token);
@@ -28,12 +36,11 @@ const Login = () => {
     } catch {
       setIsLoading(false);
     }
-
   };
 
   return (
     <div className="h-48 w-96 p-4">
-      <Spinner show={ isLoading }></Spinner>
+      <Spinner show={isLoading}></Spinner>
       <Link to={"/"}>
         <span className="py-8">{"<- Back"} </span>
       </Link>

@@ -5,7 +5,7 @@ import Home from "components/home";
 import Login from "components/login";
 import SignUp from "components/signup";
 import Dashboard from "components/dashboard";
-import ProtectedRoute from "routes";
+import { ProtectedRoute, ProtectedLoginSignUp } from "routes";
 import Layout from "components/layout";
 
 function App() {
@@ -15,8 +15,22 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/sign-up" element={<SignUp />} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedLoginSignUp>
+                  <Login />
+                </ProtectedLoginSignUp>
+              }
+            />
+            <Route
+              path="/sign-up"
+              element={
+                <ProtectedLoginSignUp>
+                  <SignUp />
+                </ProtectedLoginSignUp>
+              }
+            />
             <Route
               path="/dashboard"
               element={
@@ -25,6 +39,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<Home />}></Route>
           </Routes>
         </Layout>
       </BrowserRouter>
