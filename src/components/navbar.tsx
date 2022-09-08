@@ -11,8 +11,7 @@ const Navbar = () => {
       <button
         className="px-4 py-2 m-1 mr-2"
         onClick={() => {
-          localStorage.removeItem("token");
-          navigate("/login");
+          navigate("/");
         }}
       >
         Home
