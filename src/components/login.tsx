@@ -21,12 +21,6 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      fetch("/login").then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.blob();
-      });
 
       const res = await api.post("/login", user);
       const { token } = res.data.data;

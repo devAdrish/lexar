@@ -2,11 +2,8 @@ import React from "react";
 
 const Home = () => {
   return (
-    <div>
-      <h1>HOME</h1>
-      <br />
-      <br />
-      <div className="flex-col"></div>
+    <div className="flex w-screen h-screen justify-center items-center">
+      <h1> Welcome to LEXAR </h1>
     </div>
   );
 };

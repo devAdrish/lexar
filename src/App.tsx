@@ -7,6 +7,7 @@ import SignUp from "components/signup";
 import Dashboard from "components/dashboard";
 import { ProtectedRoute, ProtectedLoginSignUp } from "routes";
 import Layout from "components/layout";
+import Chat from "components/chat";
 
 function App() {
   return (
@@ -39,6 +40,15 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              }
+            />
+
             <Route path="*" element={<Home />}></Route>
           </Routes>
         </Layout>
