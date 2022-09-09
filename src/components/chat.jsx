@@ -8,7 +8,8 @@ let socket;
 
 const Chat = () => {
   const { state } = useLocation();
-  const { user1, user2 } = state;
+  const { chatWith, email, token } = state;
+
 
   const [message, setMessage] = useState("");
   const [allMsgs, setAllMsgs] = useState([]);
@@ -16,24 +17,30 @@ const Chat = () => {
   socket = io(ENDPOINT);
 
   const getUserChat = useCallback(async () => {
-    const token = localStorage.getItem('token');
-    const chat = await api.get(`/chat/${user1}/${user2}`, token);
+    const chat = await api.get(`/chat/${email}/${chatWith}`, token);
     setAllMsgs(chat.data.data.messages);
-  }, [user1, user2]);
+  }, [email, chatWith, token]);
+
+  const updateMessages = useCallback(
+    (msg) => {
+      if (msg.from !== email) setAllMsgs((msgs) => [...msgs, msg]);
+    },
+    [email]
+  );
 
   useEffect(() => {
-    socket.emit("join", { from: user1, to: user2 }, (data) => {
+    socket.emit("join", { from: email, to: chatWith }, (data) => {
       console.log(data);
 
       if (data.status === "success") {
         getUserChat();
       }
     });
-  }, [getUserChat, user1, user2]);
+  }, [getUserChat, email, chatWith]);
 
   useEffect(() => {
-    socket.off('message').on("message", async (message) => {
-      setAllMsgs(msgs => [...msgs, message])
+    socket.off("message").on("message", async (message) => {
+      updateMessages(message);
     });
 
     socket.on("publicMessage", (message) => {
@@ -43,15 +50,19 @@ const Chat = () => {
     socket.on("statusUpdate", (status) => {
       console.log("Status Update", status);
     });
-
-  }, []);
+    return () => {
+      socket.emit("disconnection", { user: email });
+      socket.removeAllListeners();
+    };
+  }, [updateMessages, email]);
 
   const sendMessage = (event) => {
     event.preventDefault();
 
     if (message) {
-      socket.emit("sendMessage", { from: user1, to: user2, message }, (e) =>
-        alert(e)
+      setAllMsgs((msgs) => [...msgs, { from: email, to: chatWith, message }]);
+      socket.emit("sendMessage", { from: email, to: chatWith, message }, (payload) =>
+         (payload.status === 'error') ? alert(payload.text): null
       );
     }
     setMessage("");
@@ -60,23 +71,23 @@ const Chat = () => {
   return (
     <div>
       <h2 className="mt-2 text-lg">
-        Hi, <span className="uppercase">{user1.split("@")[0]}</span>
+        Hi, <span className="uppercase">{email.split("@")[0]}</span>
       </h2>
       <p className="mb-4 text-sm text-blue-500">
-        Chatting with <span className="uppercase">{user2.split("@")[0]}</span>
+        Chatting with <span className="uppercase">{chatWith.split("@")[0]}</span>
       </p>
       <div className="h-[400px] w-[400px] border-4 border-grey-400 overflow-y-scroll">
         {allMsgs.map((e) => {
           return (
             <div
               className={`flex my-1 ${
-                e.from === user1 ? "justify-end" : "justify-start"
+                e.from === email ? "justify-end" : "justify-start"
               }`}
               key={e._id}
             >
               <span
                 className={`text-black rounded w-32 p-1 ${
-                  e.from === user1 ? "bg-green-200 mr-4" : "bg-blue-300 ml-4"
+                  e.from === email ? "bg-green-200 mr-4" : "bg-blue-300 ml-4"
                 }`}
               >
                 {e.message}

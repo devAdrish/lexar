@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import Navbar from "./navbar";
-import UseAuth from "hooks/useAuth";
 
 interface LayoutProps {
   children: any;

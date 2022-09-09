@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "hooks/useAuth";
+import { useAuth } from "utils/functions";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   return (
     <div className="flex justify-between">
