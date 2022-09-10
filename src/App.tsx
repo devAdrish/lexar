@@ -7,7 +7,6 @@ import SignUp from "components/signup";
 import Dashboard from "components/dashboard";
 import { ProtectedRoute, ProtectedLoginSignUp } from "routes";
 import Layout from "components/layout";
-import Chat from "components/chat";
 
 function App() {
   return (
@@ -15,9 +14,8 @@ function App() {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path="/" element={<Home />} />
             <Route
-              path="/login"
+              path="/"
               element={
                 <ProtectedLoginSignUp>
                   <Login />
@@ -33,22 +31,13 @@ function App() {
               }
             />
             <Route
-              path="/dashboard"
+              path="/chat"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/chat"
-              element={
-                <ProtectedRoute>
-                  <Chat />
-                </ProtectedRoute>
-              }
-            />
-
             <Route path="*" element={<Home />}></Route>
           </Routes>
         </Layout>

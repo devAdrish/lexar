@@ -8,7 +8,7 @@ const Layout: FC<LayoutProps> = (props) => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center">
+      <div>
         {props.children}
         </div>
     </>

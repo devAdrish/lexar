@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "services/api";
-import Spinner from "./spinner";
+import LoadingIndicator from "./loading-indicator";
 
 const SignUp = () => {
   const [user, setUser] = useState({ name: "", email: "", password: "" });
@@ -19,10 +19,10 @@ const SignUp = () => {
     setIsLoading(true);
     try {
       const res = await api.post("/register", user);
-      const { token } = res.data;
+      const { token } = res.data.data;
       localStorage.setItem("token", token);
       setIsLoading(false);
-      navigate("/dashboard");
+      navigate("/chat");
     } catch (err: any) {
       console.log(err?.response);
       setIsLoading(false);
@@ -47,8 +47,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="h-48 w-96 p-4">
-      <Spinner show={isLoading}></Spinner>
+   <div className="flex justify-center">
+     <div className="h-48 w-96 p-4">
+      <LoadingIndicator show={isLoading} />
       <Link to={"/"}>
         <span className="py-8">{"<- Back"} </span>
       </Link>
@@ -106,6 +107,7 @@ const SignUp = () => {
         Submit
       </button>
     </div>
+   </div>
   );
 };
 

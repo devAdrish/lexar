@@ -1,4 +1,8 @@
-interface FormProps {
-  onSubmit: (v: any) => void;
-  title?: string;
+interface FriendInfo {
+  name: string;
+  email: string;
+  isOnline: boolean;
+  photo: string;
+  about: string;
 }
+

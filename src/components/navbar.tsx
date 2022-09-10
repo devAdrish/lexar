@@ -7,14 +7,14 @@ const Navbar = () => {
   const { isLoggedIn } = useAuth();
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between border-b mb-2 border-grey-700">
       <button
         className="px-4 py-2 m-1 mr-2"
-        onClick={() => {
-          navigate("/");
-        }}
+        // onClick={() => {
+        //   navigate("/");
+        // }}
       >
-        Home
+        Lexar
       </button>
       <span>
         {isLoggedIn ? (
@@ -25,7 +25,7 @@ const Navbar = () => {
                 navigate("/dashboard");
               }}
             >
-              Dashboard
+              Chat
             </button>
             <button
               className="hover:bg-orange-500 hover:text-white transition-all duration-500 rounded-md px-4 py-2 m-1 mr-2"
