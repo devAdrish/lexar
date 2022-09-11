@@ -31,7 +31,7 @@ const Navbar = () => {
               className="hover:bg-orange-500 hover:text-white transition-all duration-500 rounded-md px-4 py-2 m-1 mr-2"
               onClick={() => {
                 localStorage.removeItem("token");
-                navigate("/login");
+                navigate("/");
               }}
             >
               Logout
@@ -50,7 +50,7 @@ const Navbar = () => {
             <button
               className="hover:bg-blue-500 hover:text-white transition-all duration-500 rounded-md px-4 py-2 m-1 mr-2"
               onClick={() => {
-                navigate("/login");
+                navigate("/");
               }}
             >
               Login
