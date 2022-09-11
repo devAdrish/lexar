@@ -51,7 +51,7 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
     if (message) {
       setAllMsgs((msgs) => [
         ...msgs,
-        { _id: new Date(), from: email, to: chatWith, message },
+        { _id: Date.now().toString(), time: new Date (), from: email, to: chatWith, message },
       ]);
       socket.emit(
         "sendMessage",
@@ -96,7 +96,6 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
                 >
                   {e.message}
                   <div className="text-[10px] text-gray-700">
-                    {/* {toMsgTime(Date().toString())} */}
                     {toMsgTime(e.time)}
                   </div>
                 </div>
