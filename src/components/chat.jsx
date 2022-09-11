@@ -62,6 +62,7 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
             from: email,
             to: chatWith,
             message,
+            time: new Date (),
           });
         }
       );
