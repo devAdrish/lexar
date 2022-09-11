@@ -8,14 +8,14 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between border-b mb-2 border-grey-700">
-      <button
+      <span
         className="px-4 py-2 m-1 mr-2"
         // onClick={() => {
         //   navigate("/");
         // }}
       >
         Lexar
-      </button>
+      </span>
       <span>
         {isLoggedIn ? (
           <>
