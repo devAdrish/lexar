@@ -1,22 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react";
-import io, { Socket } from "socket.io-client";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { api } from "services/api";
 import { deepCopy, useAuth } from "utils/functions";
+import { MainContext } from "contexts/MainContext";
+import { Modal } from "antd";
 import LoadingIndicator from "./loading-indicator";
 import Chat from "./chat";
-import Modal from "antd/lib/modal/Modal";
+import io, { Socket } from "socket.io-client";
 
 let socket: Socket;
 
 const Dashboard = () => {
+  const {  raiseToast } = useContext(MainContext);
+  const { userData, token } = useAuth();
   const [friendsList, setFriendsList] = useState<FriendInfo[]>([]);
   const [chatWith, setChatWith] = useState("");
   const [chatVisible, setChatVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [friend, setFriend] = useState("");
-
-  const { userData, token } = useAuth();
 
   useEffect(() => {
     if (userData.email) {
@@ -28,13 +29,14 @@ const Dashboard = () => {
   const getFriendsList = useCallback(async () => {
     try {
       setIsLoading(true);
-      const result = await api.get("/getFriendsInfo", token!);
+      const result = await api.get("/getFriendsInfo", token);
       setFriendsList(result.data.data);
       setIsLoading(false);
-    } catch {
+    } catch (er: allAnyTypes) {
       setIsLoading(false);
+      raiseToast({ message: er?.response?.data?.message, type: "error" });
     }
-  }, [token]);
+  }, [raiseToast, token]);
 
   useEffect(() => {
     getFriendsList();
@@ -56,8 +58,7 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    socket
-      .off("userOnlineStatusUpdate")
+    socket.off("userOnlineStatusUpdate")
       .on("userOnlineStatusUpdate", updateFriendsStatus);
   }, [updateFriendsStatus]);
 
@@ -99,7 +100,6 @@ const Dashboard = () => {
   return (
     <div className="flex justify-between w-screen p-2">
       <LoadingIndicator show={isLoading} />
-
       <Modal
         visible={showModal}
         destroyOnClose
@@ -124,7 +124,7 @@ const Dashboard = () => {
         </div>
       </Modal>
 
-      <div className="h-[90vh] w-[20vw] overflow-y-scroll border border-grey-700 rounded-md p-2">
+      <div className="h-[90vh] w-[30vw] overflow-y-scroll border border-grey-700 rounded-md p-2">
         <button
           className="bg-green-600 p-2 w-[90%] mx-[5%] text-center rounded text-white mb-4"
           onClick={openModal}

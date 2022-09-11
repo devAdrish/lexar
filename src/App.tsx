@@ -7,10 +7,12 @@ import SignUp from "components/signup";
 import Dashboard from "components/dashboard";
 import { ProtectedRoute, ProtectedLoginSignUp } from "routes";
 import Layout from "components/layout";
+import MainContextProvider from "contexts/MainContext";
 
 function App() {
   return (
     <div className="h-screen w-screen">
+      <MainContextProvider>
       <BrowserRouter>
         <Layout>
           <Routes>
@@ -42,6 +44,7 @@ function App() {
           </Routes>
         </Layout>
       </BrowserRouter>
+      </MainContextProvider>
     </div>
   );
 }
