@@ -51,7 +51,7 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
     if (message) {
       setAllMsgs((msgs) => [
         ...msgs,
-        { _id: Date.now().toString(), from: email, to: chatWith, message },
+        { _id: new Date(), from: email, to: chatWith, message },
       ]);
       socket.emit(
         "sendMessage",
