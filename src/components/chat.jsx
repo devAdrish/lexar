@@ -1,15 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "services/api";
 import { deepCopy, toMsgTime } from "utils/functions";
+import Picker from "emoji-picker-react";
+import { BsEmojiLaughingFill } from "react-icons/bs";
 
 const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
   const [message, setMessage] = useState("");
   const [allMsgs, setAllMsgs] = useState([]);
+  const [emojiPicker, showEmojiPicker] = useState(false);
 
   const chatBottomRef = useRef();
 
   const getUserChat = useCallback(async () => {
-    const chat = await api.get(`/chat/${email}/${chatWith}`, token);
+    const chat = await api.get(`/chat/${email}/${chatWith}?from=adi&to=30`, token);
+    console.log('====================================');
+    console.log(chat.data.data);
+    console.log('====================================');
     setAllMsgs(chat.data.data.messages);
   }, [email, chatWith, token]);
 
@@ -51,7 +57,13 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
     if (message) {
       setAllMsgs((msgs) => [
         ...msgs,
-        { _id: Date.now().toString(), time: new Date (), from: email, to: chatWith, message },
+        {
+          _id: Date.now().toString(),
+          time: new Date(),
+          from: email,
+          to: chatWith,
+          message,
+        },
       ]);
       socket.emit(
         "sendMessage",
@@ -62,7 +74,7 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
             from: email,
             to: chatWith,
             message,
-            time: new Date (),
+            time: new Date(),
           });
         }
       );
@@ -70,16 +82,22 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
     setMessage("");
   };
 
+  const onEmojiPick = (_, data) => {
+    const newMsg = message + " " + data.emoji;
+    setMessage(newMsg);
+  };
+
   return (
     <div>
-      <div className="h-[78vh] w-[68vw] pt-8 rounded-md border border-grey-400 overflow-y-scroll relative">
+      <div className="pt-8 rounded-md border border-grey-400 relative">
         <button
           onClick={onCloseChat}
           className="absolute top-0 right-0 bg-gray-200 rounded-bl px-3 py-1"
         >
           x
         </button>
-        {allMsgs.map((e) => {
+       <div className="overflow-y-scroll h-[75vh] w-[67vw] ml-4">
+       {allMsgs.map((e) => {
           return (
             <div
               className={`flex my-1 text-base ${
@@ -111,8 +129,21 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
           );
         })}
         <p className="h-[5px]" ref={chatBottomRef}></p>
+       </div>
       </div>
-      <div className="flex justify-between items-center">
+
+      <div className="flex justify-between items-center relative">
+        <div className="absolute bottom-14 left-0">
+          {emojiPicker && (
+            <Picker onEmojiClick={onEmojiPick} preload disableAutoFocus />
+          )}
+        </div>
+        <button
+          onClick={() => showEmojiPicker(!emojiPicker)}
+          className="text-yellow-500 text-lg mr-2"
+        >
+          <BsEmojiLaughingFill />
+        </button>
         <input
           className="flex flex-grow border-2 my-2 mr-4 border-blue-500 rounded p-2"
           placeholder="Message"

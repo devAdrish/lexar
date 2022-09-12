@@ -10,7 +10,7 @@ import io, { Socket } from "socket.io-client";
 let socket: Socket;
 
 const Dashboard = () => {
-  const {  raiseToast } = useContext(MainContext);
+  const { raiseToast } = useContext(MainContext);
   const { userData, token } = useAuth();
   const [friendsList, setFriendsList] = useState<FriendInfo[]>([]);
   const [chatWith, setChatWith] = useState("");
@@ -124,7 +124,7 @@ const Dashboard = () => {
         </div>
       </Modal>
 
-      <div className="h-[90vh] w-[30vw] overflow-y-scroll border border-grey-700 rounded-md p-2">
+      <div className="h-[87vh] w-[30vw] overflow-y-scroll border border-grey-700 rounded-md p-2">
         <button
           className="bg-green-600 p-2 w-[90%] mx-[5%] text-center rounded text-white mb-4"
           onClick={openModal}
