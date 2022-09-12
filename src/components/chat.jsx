@@ -12,10 +12,7 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
   const chatBottomRef = useRef();
 
   const getUserChat = useCallback(async () => {
-    const chat = await api.get(`/chat/${email}/${chatWith}?from=adi&to=30`, token);
-    console.log('====================================');
-    console.log(chat.data.data);
-    console.log('====================================');
+    const chat = await api.get(`/chat/${email}/${chatWith}`, token);
     setAllMsgs(chat.data.data.messages);
   }, [email, chatWith, token]);
 
