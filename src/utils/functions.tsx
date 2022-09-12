@@ -48,7 +48,7 @@ const MONTHS_MAP = [
   "Dec",
 ];
 
-export function toMsgTime(value: string) {
+export function toMsgTime(value: allAnyTypes) {
   try {
     const date = new Date(value);
     const m: number = date.getMonth();
@@ -58,11 +58,10 @@ export function toMsgTime(value: string) {
     hrs = hrs.toString().length > 1 ? hrs : "0" + hrs;
     let mins: number | string = date.getMinutes();
     mins = mins.toString().length > 1 ? mins : "0" + mins;
-    return `${MONTHS_MAP[m]} ${value.substring(
-      8,
-      10
-    )}, ${hrs}:${mins} ${ampm} `;
+    return `${MONTHS_MAP[m]} ${value
+      .toString()
+      .substring(8, 10)}, ${hrs}:${mins} ${ampm} `;
   } catch {
-    return value;
+    return value.toString();
   }
 }
