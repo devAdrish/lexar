@@ -15,6 +15,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
+    "actionsheet-react": "^1.0.14",
     "antd": "^4.22.8",
     "axios": "^0.27.2",
     "emoji-picker-react": "^3.6.2",

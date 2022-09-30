@@ -7,7 +7,7 @@ const Navbar = () => {
   const { isLoggedIn } = useAuth();
 
   return (
-    <div className="flex justify-between border-b mb-2 border-grey-700">
+    <div className="flex justify-between border-b border-grey-700">
       <span
         className="px-4 py-2 m-1 mr-2"
         // onClick={() => {

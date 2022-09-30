@@ -1,13 +1,12 @@
-import { MainContext } from "contexts/MainContext";
-import React, { useCallback, useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { message } from "antd";
+import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "services/api";
 import LoadingIndicator from "./loading-indicator";
 
 const SignUp = () => {
   const [user, setUser] = useState({ name: "", email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const { raiseToast } = useContext(MainContext);
 
   const validateEmail = useCallback(() => {
     return String(user.email)
@@ -26,9 +25,9 @@ const SignUp = () => {
       localStorage.setItem("token", token);
       setIsLoading(false);
       navigate("/chat");
-      raiseToast({ message: "Success", type: "success" });
+      message.success('Sucess')
     } catch (er: allAnyTypes) {
-      raiseToast({ message: er?.response?.data?.message, type: "error" });
+      message.error(er?.response?.data?.message ?? 'Some Error Occured!');
       setIsLoading(false);
     }
   };
@@ -54,9 +53,6 @@ const SignUp = () => {
     <div className="flex justify-center">
       <div className="h-48 w-96 p-4">
         <LoadingIndicator show={isLoading} />
-        <Link to={"/"}>
-          <span className="py-8">{"<- Back"} </span>
-        </Link>
         <input
           className="p-2 border-0 shadow-md w-96"
           value={user.name}

@@ -1,16 +1,15 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "services/api";
 import { deepCopy, useAuth } from "utils/functions";
-import { MainContext } from "contexts/MainContext";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 import LoadingIndicator from "./loading-indicator";
 import Chat from "./chat";
 import io, { Socket } from "socket.io-client";
+import ActionSheet, { ActionSheetRef } from "actionsheet-react";
 
 let socket: Socket;
 
 const Dashboard = () => {
-  const { raiseToast } = useContext(MainContext);
   const { userData, token } = useAuth();
   const [friendsList, setFriendsList] = useState<FriendInfo[]>([]);
   const [chatWith, setChatWith] = useState("");
@@ -18,6 +17,8 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [friend, setFriend] = useState("");
+
+  const ref = useRef<ActionSheetRef>();
 
   useEffect(() => {
     if (userData.email) {
@@ -34,9 +35,9 @@ const Dashboard = () => {
       setIsLoading(false);
     } catch (er: allAnyTypes) {
       setIsLoading(false);
-      raiseToast({ message: er?.response?.data?.message, type: "error" });
+      message.error(er?.response?.data?.message ?? "Some Error Occurred");
     }
-  }, [raiseToast, token]);
+  }, [token]);
 
   useEffect(() => {
     getFriendsList();
@@ -58,18 +59,21 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    socket.off("userOnlineStatusUpdate")
+    socket
+      .off("userOnlineStatusUpdate")
       .on("userOnlineStatusUpdate", updateFriendsStatus);
   }, [updateFriendsStatus]);
 
   const showChat = (e: FriendInfo) => {
     setChatWith(e.email);
     setChatVisible(true);
+    ref?.current?.open();
   };
 
   const closeChat = () => {
     setChatVisible(false);
     setChatWith("");
+    ref?.current?.close();
   };
 
   const openModal = () => {
@@ -85,20 +89,17 @@ const Dashboard = () => {
     try {
       if (!friend) return;
       setIsLoading(true);
-      const res = await api.get(`/addFriend/${friend}`, token!);
-      const { status, data } = res.data;
-      if (status === "Ok") {
-        setFriendsList(data);
-        closeModal();
-      }
+      await api.get(`/addFriend/${friend}`, token!);
+      await getFriendsList();
       setIsLoading(false);
-    } catch {
+    } catch (er: any) {
       setIsLoading(false);
+      message.error(er?.response?.data?.message ?? "Some Error Occurred");
     }
   };
 
   return (
-    <div className="flex justify-between w-screen p-2">
+    <div className="flex justify-center pt-2 w-screen">
       <LoadingIndicator show={isLoading} />
       <Modal
         visible={showModal}
@@ -124,7 +125,7 @@ const Dashboard = () => {
         </div>
       </Modal>
 
-      <div className="h-[87vh] w-[30vw] overflow-y-scroll border border-grey-700 rounded-md p-2">
+      <div className="h-[90vh] w-screen md:w-[600px] overflow-y-scroll md:border md:border-grey-700 md:rounded-md p-2">
         <button
           className="bg-green-600 p-2 w-[90%] mx-[5%] text-center rounded text-white mb-4"
           onClick={openModal}
@@ -151,6 +152,11 @@ const Dashboard = () => {
         })}
       </div>
 
+      <ActionSheet ref={ref}
+      sheetTransition='transform 0.3s ease-in-out' 
+      touchEnable 
+      mouseEnable
+      onClose={closeChat}>
       {chatVisible && socket && (
         <Chat
           chatWith={chatWith}
@@ -160,6 +166,7 @@ const Dashboard = () => {
           onCloseChat={closeChat}
         />
       )}
+      </ActionSheet>
     </div>
   );
 };

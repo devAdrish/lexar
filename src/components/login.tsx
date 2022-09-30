@@ -1,14 +1,12 @@
-import React, { useState, useCallback, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { message } from "antd";
+import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "services/api";
-import { MainContext } from "contexts/MainContext";
 import LoadingIndicator from "./loading-indicator";
 
 const Login = () => {
   const [user, setUser] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
-
-  const { raiseToast } = useContext(MainContext);
 
   const validateEmail = useCallback(() => {
     return String(user.email)
@@ -30,7 +28,7 @@ const Login = () => {
       setIsLoading(false);
       navigate("/chat");
     } catch(er: allAnyTypes) {
-      raiseToast({message: er?.response?.data?.message, type: 'error'})
+      message.error(er?.response?.data?.message ?? 'Some Error Occured!');
       setIsLoading(false);
     }
   };
@@ -39,9 +37,6 @@ const Login = () => {
     <div className="flex justify-center">
       <LoadingIndicator show={isLoading} />
       <div className="h-48 w-96 p-4">
-        <Link to={"/"}>
-          <span className="py-8">{"<- Back"} </span>
-        </Link>
         <input
           className="p-2 border-0 shadow-md w-96"
           value={user.email}

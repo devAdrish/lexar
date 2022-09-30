@@ -85,15 +85,15 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
   };
 
   return (
-    <div>
-      <div className="pt-8 rounded-md border border-grey-400 relative">
+    <div className="h-[105vh] md:h-[100vh]">
+      <div className="pt-14 md:pt-2 relative">
         <button
           onClick={onCloseChat}
-          className="absolute top-0 right-0 bg-gray-200 rounded-bl px-3 py-1"
+          className="absolute top-12 right-2 md:top-3 md:right-3 bg-gray-200 md:rounded-tr-lg px-3 py-1"
         >
           x
         </button>
-       <div className="overflow-y-scroll h-[75vh] w-[67vw] ml-4">
+       <div className="overflow-y-scroll h-[90vh]">
        {allMsgs.map((e) => {
           return (
             <div
@@ -129,8 +129,8 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
        </div>
       </div>
 
-      <div className="flex justify-between items-center relative">
-        <div className="absolute bottom-14 left-0">
+      <div className="px-3 flex justify-between items-center relative">
+        <div className="absolute bottom-14 left-2">
           {emojiPicker && (
             <Picker onEmojiClick={onEmojiPick} preload disableAutoFocus />
           )}
