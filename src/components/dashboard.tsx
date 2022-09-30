@@ -6,13 +6,14 @@ import LoadingIndicator from "./loading-indicator";
 import Chat from "./chat";
 import io, { Socket } from "socket.io-client";
 import ActionSheet, { ActionSheetRef } from "actionsheet-react";
+import { RiRadioButtonLine, RiUser6Line } from "react-icons/ri";
 
 let socket: Socket;
 
 const Dashboard = () => {
   const { userData, token } = useAuth();
   const [friendsList, setFriendsList] = useState<FriendInfo[]>([]);
-  const [chatWith, setChatWith] = useState("");
+  const [chatWith, setChatWith] = useState<FriendInfo | null>(null);
   const [chatVisible, setChatVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -65,14 +66,14 @@ const Dashboard = () => {
   }, [updateFriendsStatus]);
 
   const showChat = (e: FriendInfo) => {
-    setChatWith(e.email);
+    setChatWith(e);
     setChatVisible(true);
     ref?.current?.open();
   };
 
   const closeChat = () => {
     setChatVisible(false);
-    setChatWith("");
+    setChatWith(null);
     ref?.current?.close();
   };
 
@@ -92,6 +93,8 @@ const Dashboard = () => {
       await api.get(`/addFriend/${friend}`, token!);
       await getFriendsList();
       setIsLoading(false);
+      setShowModal(false);
+      setFriend("");
     } catch (er: any) {
       setIsLoading(false);
       message.error(er?.response?.data?.message ?? "Some Error Occurred");
@@ -135,37 +138,44 @@ const Dashboard = () => {
         {friendsList.map((f: FriendInfo) => {
           return (
             <div
-              className={`border rounded-md p-2 flex justify-between cursor-pointer my-1 ${
-                f.email === chatWith ? "bg-blue-300" : ""
-              }`}
+              className='border rounded-md p-2 flex justify-between items-center cursor-pointer my-1'
               key={f.email}
               onClick={() => showChat(f)}
             >
-              <div className="truncate w-[70%]">{f.name}</div>
-              {f.isOnline ? (
-                <span className="text-green-600 italic"> Online </span>
+              {f.photo ? (
+                <img
+                  src={f.photo}
+                  alt="profile"
+                  className="rounded-full w-6 h-6 border"
+                />
               ) : (
-                <span className="text-gray-400 italic"> Offline </span>
+                <span className="rounded-full w-6 h-6 border flex justify-center items-center bg-gray-100">
+                  <RiUser6Line className="w-4 h-4" />{" "}
+                </span>
               )}
+              <div className="ml-2 truncate w-[90%]">{f.name}</div>
+              <RiRadioButtonLine color={f.isOnline ? "green" : "grey"} />
             </div>
           );
         })}
       </div>
 
-      <ActionSheet ref={ref}
-      sheetTransition='transform 0.3s ease-in-out' 
-      touchEnable 
-      mouseEnable
-      onClose={closeChat}>
-      {chatVisible && socket && (
-        <Chat
-          chatWith={chatWith}
-          email={userData.email}
-          token={token}
-          socket={socket}
-          onCloseChat={closeChat}
-        />
-      )}
+      <ActionSheet
+        ref={ref}
+        sheetTransition="transform 0.3s ease-in-out"
+        touchEnable
+        mouseEnable
+        onClose={closeChat}
+      >
+        {chatVisible && socket && (
+          <Chat
+            chatWith={chatWith}
+            email={userData.email}
+            token={token}
+            socket={socket}
+            onCloseChat={closeChat}
+          />
+        )}
       </ActionSheet>
     </div>
   );
