@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 };
 const ProtectedLoginSignUp = ({ children }: { children: JSX.Element }) => {
   const { isLoggedIn } = useAuth();
-  return !isLoggedIn ? children : <Navigate to="/chat" />;
+  return !isLoggedIn ? children : <Navigate to="/" />;
 };
 
 export { ProtectedRoute, ProtectedLoginSignUp };

@@ -59,13 +59,34 @@ const Dashboard = () => {
     [friendsList]
   );
 
+  const handleNotification = useCallback(
+    async (payload: allAnyTypes) => {
+      new Notification(`New Message from ${payload.name}`, {
+        body: payload.message,
+      });
+      const friend = friendsList.find((f) => f.email === payload.from);
+      if (friend && chatWith && chatWith.email === friend.email) return;
+
+      if (friend) {
+        friend.newUnreadMessage = payload.message;
+        const index = friendsList.indexOf(friend);
+        const list = deepCopy(friendsList);
+        list.splice(index, 1, friend);
+        setFriendsList(list);
+      }
+    },
+    [chatWith, friendsList]
+  );
+
   useEffect(() => {
     socket
       .off("userOnlineStatusUpdate")
       .on("userOnlineStatusUpdate", updateFriendsStatus);
-  }, [updateFriendsStatus]);
+    socket.off("notfication").on("notification", handleNotification);
+  }, [handleNotification, updateFriendsStatus]);
 
   const showChat = (e: FriendInfo) => {
+    e.newUnreadMessage = "";
     setChatWith(e);
     setChatVisible(true);
     ref?.current?.open();
@@ -100,6 +121,10 @@ const Dashboard = () => {
       message.error(er?.response?.data?.message ?? "Some Error Occurred");
     }
   };
+
+  useEffect(() => {
+    Notification.requestPermission();
+  }, []);
 
   return (
     <div className="flex justify-center pt-2 w-screen">
@@ -138,7 +163,7 @@ const Dashboard = () => {
         {friendsList.map((f: FriendInfo) => {
           return (
             <div
-              className='border rounded-md p-2 flex justify-between items-center cursor-pointer my-1'
+              className="border rounded-md p-2 flex justify-between items-center cursor-pointer my-1"
               key={f.email}
               onClick={() => showChat(f)}
             >
@@ -150,10 +175,15 @@ const Dashboard = () => {
                 />
               ) : (
                 <span className="rounded-full w-6 h-6 border flex justify-center items-center bg-gray-100">
-                  <RiUser6Line className="w-4 h-4" />{" "}
+                  <RiUser6Line className="w-4 h-4" />
                 </span>
               )}
-              <div className="ml-2 truncate w-[90%]">{f.name}</div>
+              <div className="ml-2 truncate w-[90%] font-bold">
+                {f.name}
+                <span className="ml-2 font-normal text-gray-500 text-[12px]">
+                  {f.newUnreadMessage}
+                </span>
+              </div>
               <RiRadioButtonLine color={f.isOnline ? "green" : "grey"} />
             </div>
           );

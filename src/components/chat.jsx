@@ -43,7 +43,7 @@ const Chat = ({ socket, chatWith, email, token, onCloseChat }) => {
     socket.off("message").on("message", async (message) => {
       updateMessages(message);
     });
-  }, [updateMessages, email, socket]);
+  }, [updateMessages, email, socket, chatWith.email]);
 
   const afterMessage = (status, failedMsg) => {
     if (status !== "error") return;

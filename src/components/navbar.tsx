@@ -10,11 +10,11 @@ const Navbar = () => {
     <div className="flex justify-between border-b border-grey-700">
       <span
         className="px-4 py-2 m-1 mr-2"
-        // onClick={() => {
-        //   navigate("/");
-        // }}
+        onClick={() => {
+          navigate("/home");
+        }}
       >
-        Lexar
+        Lexar App
       </span>
       <span>
         {isLoggedIn ? (
@@ -22,7 +22,7 @@ const Navbar = () => {
             <button
               className="hover:bg-black hover:text-white transition-all duration-500 rounded-md px-4 py-2 m-1 m-1"
               onClick={() => {
-                navigate("/dashboard");
+                navigate("/");
               }}
             >
               Chat
@@ -31,7 +31,7 @@ const Navbar = () => {
               className="hover:bg-orange-500 hover:text-white transition-all duration-500 rounded-md px-4 py-2 m-1 mr-2"
               onClick={() => {
                 localStorage.removeItem("token");
-                navigate("/");
+                navigate("/login");
               }}
             >
               Logout
@@ -50,7 +50,7 @@ const Navbar = () => {
             <button
               className="hover:bg-blue-500 hover:text-white transition-all duration-500 rounded-md px-4 py-2 m-1 mr-2"
               onClick={() => {
-                navigate("/");
+                navigate("/login");
               }}
             >
               Login

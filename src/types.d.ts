@@ -1,5 +1,7 @@
 type allAnyTypes = any | undefined | null;
 
+declare module "*.png"
+
 interface RaiseToastFnArgs {
   message: string;
   type: string;
@@ -12,6 +14,7 @@ interface FriendInfo {
   isOnline: boolean;
   photo: string;
   about: string;
+  newUnreadMessage?: string;
 }
 
 interface Message {

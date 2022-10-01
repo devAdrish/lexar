@@ -26,7 +26,7 @@ const Login = () => {
       const { token } = res.data.data;
       localStorage.setItem("token", token);
       setIsLoading(false);
-      navigate("/chat");
+      navigate("/");
     } catch(er: allAnyTypes) {
       message.error(er?.response?.data?.message ?? 'Some Error Occured!');
       setIsLoading(false);
@@ -34,25 +34,25 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div>
       <LoadingIndicator show={isLoading} />
-      <div className="h-48 w-96 p-4">
+      <div className="flex flex-col items-center p-4">
         <input
-          className="p-2 border-0 shadow-md w-96"
+          className="p-2 border-0 shadow-md md:w-96"
           value={user.email}
           placeholder="Email"
           required
           onChange={(e) => {
-            setUser({ ...user, email: e.target.value });
+            setUser({ ...user, email: e.target.value.trim().toLowerCase() });
           }}
         />
         {user.email && !validateEmail() && (
-          <p className="mt-1 mb-3 w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
+          <p className="mt-1 mb-3 md:w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
             Email is not valid.
           </p>
         )}
         <input
-          className="p-2 border-0 shadow-md mt-2 w-96"
+          className="p-2 border-0 shadow-md mt-2 md:w-96"
           value={user.password}
           placeholder="Password"
           type="password"
@@ -65,7 +65,7 @@ const Login = () => {
           onClick={handleLogin}
           type="submit"
           disabled={!validateEmail() || user.password.length < 6}
-          className="p-2 mt-8 w-96 bg-blue-500 shadow-md text-white rounded-md disabled:bg-gray-300"
+          className="p-2 mt-8 md:w-96 bg-blue-500 shadow-md text-white rounded-md disabled:bg-gray-300"
         >
           Log In
         </button>

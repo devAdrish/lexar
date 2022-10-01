@@ -24,10 +24,10 @@ const SignUp = () => {
       const { token } = res.data.data;
       localStorage.setItem("token", token);
       setIsLoading(false);
-      navigate("/chat");
-      message.success('Sucess')
+      navigate("/");
+      message.success("Sucess");
     } catch (er: allAnyTypes) {
-      message.error(er?.response?.data?.message ?? 'Some Error Occured!');
+      message.error(er?.response?.data?.message ?? "Some Error Occured!");
       setIsLoading(false);
     }
   };
@@ -50,11 +50,11 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="h-48 w-96 p-4">
-        <LoadingIndicator show={isLoading} />
+    <div>
+      <LoadingIndicator show={isLoading} />
+      <div className="flex flex-col items-center p-4">
         <input
-          className="p-2 border-0 shadow-md w-96"
+          className="p-2 border-0 shadow-md md:w-96"
           value={user.name}
           placeholder="Name"
           required
@@ -63,13 +63,13 @@ const SignUp = () => {
           }}
         />
         {user.name && user.name.length < 5 && (
-          <p className="mt-1 mb-3 w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
+          <p className="mt-1 mb-3 md:w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
             Name must be atleast 5 characters long.
           </p>
         )}
 
         <input
-          className="p-2 border-0 shadow-md mt-2 w-96"
+          className="p-2 border-0 shadow-md mt-2 md:w-96"
           value={user.email}
           placeholder="Email"
           required
@@ -78,12 +78,12 @@ const SignUp = () => {
           }}
         />
         {user.email && !validateEmail() && (
-          <p className="mt-1 mb-3 w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
+          <p className="mt-1 mb-3 md:w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
             Email is not valid.
           </p>
         )}
         <input
-          className="p-2 border-0 shadow-md mt-2 w-96"
+          className="p-2 border-0 shadow-md mt-2 md:w-96"
           value={user.password}
           placeholder="Password"
           type="password"
@@ -93,7 +93,7 @@ const SignUp = () => {
           }}
         />
         {user.password && !validatePassword() && (
-          <p className="mt-1 mb-3 w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
+          <p className="mt-1 mb-3 md:w-96 text-sm text-white bg-red-500 italic rounded-sm p-2">
             Password must contain atleast 1 Alphabet, 1 Number and must be
             atleast 6 characters.
           </p>
@@ -102,7 +102,7 @@ const SignUp = () => {
           onClick={onSubmit}
           type="submit"
           disabled={!isFormValid()}
-          className="p-2 mt-8 w-96 bg-blue-500 shadow-md text-white rounded-md disabled:bg-gray-300"
+          className="p-2 mt-8 md:w-96 bg-blue-500 shadow-md text-white rounded-md disabled:bg-gray-300"
         >
           Submit
         </button>

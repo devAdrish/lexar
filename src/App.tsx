@@ -14,8 +14,16 @@ function App() {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route
+          <Route
               path="/"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/login"
               element={
                 <ProtectedLoginSignUp>
                   <Login />
@@ -30,15 +38,8 @@ function App() {
                 </ProtectedLoginSignUp>
               }
             />
-            <Route
-              path="/chat"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<Home />}></Route>
+            <Route path="/home" element={<Home />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </Layout>
       </BrowserRouter>

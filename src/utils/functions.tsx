@@ -1,3 +1,11 @@
+export function swRegister() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch((err) => {
+      console.log(err);
+    });
+  }
+}
+
 export function parseJwt(token: string) {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
