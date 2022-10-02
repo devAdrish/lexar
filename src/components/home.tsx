@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import Logo from "../assets/images/logo.png";
 
 const Home = () => {
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [installPrompt, setInstallPrompt] = useState<allAnyTypes>(null);
+  const [appIsInstalled, setAppIsInstalled] = useState<boolean>(false);
+
   const installApp = async () => {
+    if (appIsInstalled) {
+      const appUrl = window.location.href.replace("/home", "/");
+      window.open(appUrl, "_blank");
+      return;
+    }
+
+    if (installPrompt === null) {
+      window.location.reload();
+      return;
+    }
+
     installPrompt.prompt();
     const { outcome } = await installPrompt.userChoice;
     if (outcome === "accepted") {
-      setInstallPrompt(null);
+      setAppIsInstalled(true);
     }
-  };
-
-  const openApp = () => {
-    const appUrl = window.location.href.replace("/home", "/");
-    if (installPrompt == null) window.open(appUrl, "_blank");
-    else installApp();
   };
 
   const beforeInstallPrompt = (e: any) => {
@@ -24,7 +30,7 @@ const Home = () => {
   };
 
   const appInstalled = () => {
-    setInstallPrompt(null);
+    setAppIsInstalled(true);
   };
 
   useEffect(() => {
@@ -34,7 +40,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("beforeinstallprompt", beforeInstallPrompt);
       window.removeEventListener("appinstalled", appInstalled);
-    }
+    };
   }, []);
 
   return (
@@ -46,29 +52,13 @@ const Home = () => {
           className="w-20 h-20 text-gray-600 block"
         />
         <p className="mb-6 text-sm"> Messenger </p>
-        <AnimatePresence>
-          {installPrompt !== null ? (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={installApp}
-              className="bg-blue-500 text-white rounded shadow-md px-4 py-2 block"
-            >
-              Install App
-            </motion.button>
-          ) : (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={openApp}
-              className="bg-blue-500 text-white rounded shadow-md px-4 py-2 block"
-            >
-              Open App
-            </motion.button>
-          )}
-        </AnimatePresence>
+
+        <button
+          onClick={installApp}
+          className="bg-blue-500 text-white rounded shadow-md px-4 py-2 block"
+        >
+          Install App
+        </button>
       </div>
     </div>
   );
