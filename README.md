@@ -1,2 +1,2 @@
 # lexar
-Lexar Collab App
+Lexar Chat App - Uses Web Sockets
